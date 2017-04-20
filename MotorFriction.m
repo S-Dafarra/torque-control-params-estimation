@@ -66,15 +66,12 @@ classdef MotorFriction
             obj.p1Noise = torque-obj.getFriction(velocity);
         end
         
-        function obj = setPhase2Data(obj, data)
+        function obj = Phase2(obj, data)
             %% Load data for second estimation phase
             obj.p2Velocity = data.velocity;
             obj.p2Torque = data.torque;
             obj.p2PWM = data.PWM;
             obj.p2Voltage = data.voltage;
-        end
-        
-        function obj = Phase2(obj)
             %% Evaluate coefficient for Kt motor
             obj.p2Friction = obj.getFriction(obj.p2Velocity);
             A = Joint.linearRegression(obj.p2PWM,obj.p2Torque-obj.p2Friction);
