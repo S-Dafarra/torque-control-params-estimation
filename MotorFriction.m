@@ -79,46 +79,7 @@ classdef MotorFriction
             obj.KtFirmware = A(1);
             obj.Kt = B(1);
         end
-    
-         function friction = getFriction(obj, qdot)
-            %% Evaluate friction model
-            friction = zeros(size(qdot,1),1);
-            friction(qdot > 0) = obj.KcP + obj.KvP*qdot(qdot > 0);
-            friction(qdot == 0) = (obj.KcP-obj.KcN)/2 + obj.KcN;
-            friction(qdot < 0) = obj.KcN + obj.KvN*qdot(qdot < 0);
-        end
-        
-        function plotFrictionModel(obj, option)
-            %% Plot Friction Model
-            if ~exist('option','var')
-                option = 'r';
-            end
-            
-            hold on;
-            x = 0:0.01:max(obj.P1velocity);
-            plot(x, x*obj.KvP + obj.KcP,option,'LineWidth',3);
-            x = min(obj.velocity):0.01:0;
-            plot(x, x*obj.KvN + obj.KcN,option,'LineWidth',3);
-            plot([0 0], [obj.KcP obj.KcN] ,option,'LineWidth',3);
-            hold off;
-        end
-        
-        function plotPhase1Noise(obj)
-            %% Plot noise
-            plot(obj.p1Velocity,obj.p1Noise);
-            xlabel('qdot','Interpreter','tex');
-            ylabel('\tau','Interpreter','tex');
-        end
-        
-        function plotFriction(obj)
-            %% Plot friction
-            
-            plot(obj.p1Velocity,obj.p1Torque);
 
-            xlabel('qdot [deg]/[s] (Velocity)','Interpreter','tex');
-            ylabel('\tau [Nm] (Torque)','Interpreter','tex');
-        end
-        
         function plotPhase1(obj)
             figure;
             subplot(2,1,1);
@@ -147,6 +108,48 @@ classdef MotorFriction
             obj.plotMotorModel('');
             hold off
         end
+    end
+    methods (Access = private)         
+            
+         function friction = getFriction(obj, qdot)
+            %% Evaluate friction model
+            friction = zeros(size(qdot,1),1);
+            friction(qdot > 0) = obj.KcP + obj.KvP*qdot(qdot > 0);
+            friction(qdot == 0) = (obj.KcP-obj.KcN)/2 + obj.KcN;
+            friction(qdot < 0) = obj.KcN + obj.KvN*qdot(qdot < 0);
+        end
+        
+        function plotFrictionModel(obj, option)
+            %% Plot Friction Model
+            if ~exist('option','var')
+                option = 'r';
+            end
+            
+            hold on;
+            x = 0:0.01:max(obj.P1velocity);
+            plot(x, x*obj.KvP + obj.KcP,option,'LineWidth',3);
+            x = min(obj.velocity):0.01:0;
+            plot(x, x*obj.KvN + obj.KcN,option,'LineWidth',3);
+            plot([0 0], [obj.KcP obj.KcN] ,option,'LineWidth',3);
+            hold off;
+        end
+        
+       function plotPhase1Noise(obj)
+            %% Plot noise
+            plot(obj.p1Velocity,obj.p1Noise);
+            xlabel('qdot','Interpreter','tex');
+            ylabel('\tau','Interpreter','tex');
+        end
+        
+        function plotFriction(obj)
+            %% Plot friction
+            
+            plot(obj.p1Velocity,obj.p1Torque);
+
+            xlabel('qdot [deg]/[s] (Velocity)','Interpreter','tex');
+            ylabel('\tau [Nm] (Torque)','Interpreter','tex');
+        end
+        
         
         function plotMotorModel(obj, typedata)
             %% Plot Motor model
