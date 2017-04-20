@@ -9,7 +9,6 @@ classdef MotorFriction
         p2Voltage
         p2Friction;
         T;
-        ratioTorque;
         name;
     end
     
@@ -40,7 +39,6 @@ classdef MotorFriction
             obj.KtFirmware = 0;
             obj.Kt = 0;
             obj.th_velocity = 500;
-            obj.ratioTorque = 1;
             
         end
 
@@ -74,13 +72,6 @@ classdef MotorFriction
             obj.p2Torque = data.torque;
             obj.p2PWM = data.PWM;
             obj.p2Voltage = data.voltage;
-        end
-        
-        function obj = setRatioTorque(obj, maxTorque)
-            % Useful for plotting
-            if maxTorque ~= 1
-                obj.ratioTorque = 32000/maxTorque;
-            end
         end
         
         function obj = Phase2(obj)
@@ -186,7 +177,7 @@ classdef MotorFriction
                 option = '.';
             end
             if strcmp(typedata,'Firmware')
-                plot(obj.p2PWM, obj.ratioTorque*(obj.p2Torque-obj.p2Friction), option);
+                plot(obj.p2PWM, obj.p2Torque-obj.p2Friction, option);
                 xlabel('PWM','Interpreter','tex');
                 ylabel('TorqueMachine','Interpreter','tex');
             else
