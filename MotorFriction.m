@@ -1,26 +1,25 @@
-classdef MotorFriction
+classdef MotorFriction < handle
   
     properties(SetAccess=private, GetAccess=private)
         p1Velocity;
         p1Torque;
+        p1Noise;
         p2Velocity;
         p2Torque;
         p2PWM
         p2Voltage
         p2Friction;
-        T;
-        name;
+        th_velocity;
     end
     
     properties
-        th_velocity;
+        name;
         KcP;
         KcN;
         KvP;
         KvN;
         KtFirmware;
         Kt;
-        p1Noise;
     end
     
     methods
@@ -109,9 +108,11 @@ classdef MotorFriction
             hold off
         end
     end
+    
+    
     methods (Access = private)         
             
-         function friction = getFriction(obj, qdot)
+        function friction = getFriction(obj, qdot)
             %% Evaluate friction model
             friction = zeros(size(qdot,1),1);
             friction(qdot > 0) = obj.KcP + obj.KvP*qdot(qdot > 0);
